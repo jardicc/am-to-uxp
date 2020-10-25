@@ -1,0 +1,23 @@
+{
+  "name": "am-for-uxp",
+  "version": "0.1.0",
+  "description": "Polyfill for action manager code in UXP",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "photoshop"
+  ],
+  "author": "Jaroslav Bereza",
+  "license": "MIT",
+  "dependencies": {
+    "@types/lodash-es": "^4.17.3",
+    "@types/photoshop": "git+https://github.com/adobe-uxp/types-photoshop.git",
+    "jest": "^26.6.1",
+    "lodash-es": "^4.17.15",
+    "ts-jest": "^26.4.2",
+    "typescript": "^4.0.3",
+    "webpack": "^5.2.0"
+  }
+}

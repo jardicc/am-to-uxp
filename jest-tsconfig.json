@@ -1,0 +1,18 @@
+{
+	"compileOnSave": true,	
+	"compilerOptions": {
+		"downlevelIteration": true,
+		"allowJs": true,
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"lib": ["es6", "es7", "es2015", "es2019","dom"],
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"noImplicitAny": true,
+		"noImplicitThis": false,
+		"noUnusedLocals": false,
+		"resolveJsonModule": true,
+		"suppressImplicitAnyIndexErrors": true,
+		"target": "es2019"
+	}
+}
