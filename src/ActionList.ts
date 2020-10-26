@@ -1,4 +1,5 @@
 
+import { cloneDeep } from "lodash";
 import { Descriptor } from "photoshop/dist/types/UXP";
 import { stringIDToTypeID, typeIDToStringID } from ".";
 import {ActionDescriptor, DescriptorValue } from "./ActionDescriptor";
@@ -50,7 +51,8 @@ export class ActionList {
 	 * Gets the value of list element of type class.
 	 */
 	public getClass(index: number): number {
-		return stringIDToTypeID(this._[index]);
+		const item = this._[index] as any;
+		return stringIDToTypeID(item._class);
 	}
 
 	/**
@@ -107,7 +109,7 @@ export class ActionList {
 	 * Gets the value of list element of type list.
 	 */
 	public getList(index: number): ActionList {
-		//return ActionList this._[index];
+		return ActionList.fromBatchPlay(this._[index]);
 	}
 
 	/**
@@ -137,7 +139,7 @@ export class ActionList {
 	 * Gets the value of list element of type ActionReference.
 	 */
 	public getReference(index: number): ActionReference {
-
+		return ActionReference.fromBatchPlay(this._[index]);
 	}
 
 	/**
@@ -232,7 +234,7 @@ export class ActionList {
 	 * Appends new value, nested action list.
 	 */
 	public putList(value: ActionList): void {
-
+		this._.push(value.toBatchPlay());
 	}
 
 	/**
@@ -241,7 +243,7 @@ export class ActionList {
 	public putObject(classID: number, value: ActionDescriptor): void {
 		const desc = value.toBatchPlay();
 		desc._obj = typeIDToStringID(classID);
-		this._.push(value);
+		this._.push(desc);
 	}
 
 	/**
@@ -255,7 +257,7 @@ export class ActionList {
 	 * Appends new value, reference to an object created in the script.
 	 */
 	public putReference(value: ActionReference): void {
-
+		this._.push(value.toBatchPlay());
 	}
 
 	/**

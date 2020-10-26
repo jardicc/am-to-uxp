@@ -1,6 +1,6 @@
 import { Descriptor } from "photoshop/dist/types/UXP";
 import { stringIDToTypeID, typeIDToStringID } from ".";
-import { cloneDeep } from "lodash-es";
+import { cloneDeep } from "lodash";
 
 /**
  * The type of action reference object.
@@ -50,13 +50,6 @@ export class ActionReference {
 		this._ = [];
 	}
 
-	  /**
-	 * The number of keys contained in the descriptor.
-	 */
-	public get count(): number{
-		return this._.length;
-	}
-
 	/**
 	 * The class name of the referenced ActionDescriptor object.
 	 */
@@ -65,7 +58,7 @@ export class ActionReference {
 	}
 
 	public toBatchPlay(): Descriptor{		
-		return this._;
+		return cloneDeep(this._);
 	}
 
 	public static fromBatchPlay(descriptor: Descriptor[]):ActionReference {
@@ -228,7 +221,7 @@ export class ActionReference {
 	public putProperty(desiredClass: number, value: number): void {
 		this._.push({
 			"_ref": typeIDToStringID(desiredClass),
-			"_property": value,
+			"_property": typeIDToStringID(value),
 		});
 	}
 }

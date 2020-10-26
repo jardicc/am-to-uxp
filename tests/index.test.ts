@@ -18,7 +18,7 @@ jest.mock('../src/imports.ts', () => {
 				console.log(commands[0]?._obj);
 				if (commands[0]?._obj === "invert") {					
 					return [{}]
-				} else if (commands[0]?._obj === "$Mk  ") {
+				} else if (commands[0]?._obj === "make") {
 					return [
 						{
 							"_target": [
@@ -76,7 +76,6 @@ describe("executeAction", () => {
 			desc21.putReference(idnull, ref2);
 			var idLyrI = stringIDToTypeID("layerID");
 		desc21.putInteger(idLyrI, 3);
-		console.log(desc21);
 		executeAction(idMk, desc21, DialogModes.NO);
 	});
 })

@@ -1,3 +1,4 @@
+import { cloneDeep } from "lodash";
 import { Action } from "photoshop/dist/dom/Actions";
 import { stringIDToTypeID, typeIDToStringID } from ".";
 import { ActionList } from "./ActionList";
@@ -209,7 +210,7 @@ export class ActionDescriptor {
 	 * Gets the value of key of type list.
 	 */
 	public getList(key: number): ActionList{
-
+		return ActionList.fromBatchPlay(this._[typeIDToStringID(key)] as any);
 	}
 
 	/**
@@ -239,7 +240,7 @@ export class ActionDescriptor {
 	 * Gets the value of key of type ActionReference.
 	 */
 	public getReference(key: number): ActionReference{
-
+		return ActionReference.fromBatchPlay(this._[typeIDToStringID(key)] as Descriptor[]);
 	}
 
 	/**
@@ -369,7 +370,7 @@ export class ActionDescriptor {
 	 * Sets the value for key whose type is an object reference.
 	 */
 	public putReference(key: number, value: ActionReference): void{
-
+		this._[typeIDToStringID(key)] = value.toBatchPlay();
 	}
 
 	/**
@@ -397,6 +398,6 @@ export class ActionDescriptor {
 	}
 
 	public toBatchPlay(): Descriptor{		
-		return this._;
+		return cloneDeep(this._);
 	}
 }
