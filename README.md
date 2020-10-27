@@ -4,7 +4,7 @@ Work in progress. Not yet recommended for use in production unless you are prett
 
 Allows you to run AM code in UXP. 
 
-```
+```ts
 import { ActionDescriptor } from "../../src/ActionDescriptor"
 import { stringIDToTypeID, executeAction, DialogModes } from '../../src';
 import { ActionReference } from '../../src/ActionReference';
@@ -22,7 +22,7 @@ executeAction(idMk, desc21, DialogModes.NO);
 ```
 
 This will be automatically internal translated into:
-```
+```ts
 const batchPlay = require("photoshop").action.batchPlay;
 
 batchPlay(
@@ -46,7 +46,7 @@ batchPlay(
 });
 ```
 You can also do explicit conversion like this
-```
+```ts
 import {ActionDescriptor } from "../../src/ActionDescriptor"
 import { stringIDToTypeID, executeAction, DialogModes } from '../../src';
 import { ActionReference } from '../../src/ActionReference';
