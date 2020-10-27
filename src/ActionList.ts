@@ -131,9 +131,9 @@ export class ActionList {
 	/**
 	 * Gets the value of list element of type File.
 	 */
-	public getPath(index: number): File {
+	/*public getPath(index: number): File {
 
-	}
+	}*/
 
 	/**
 	 * Gets the value of list element of type ActionReference.
@@ -152,9 +152,9 @@ export class ActionList {
 	/**
 	 * Gets the type of list element.
 	 */
-	public getType(index: number): DescValueType {
+	/*public getType(index: number): DescValueType {
 
-	}
+	}*/
 
 	/**
 	 * Gets the unit value type of list element of type double.

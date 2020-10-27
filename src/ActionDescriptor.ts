@@ -232,9 +232,9 @@ export class ActionDescriptor {
 	/**
 	 * Gets the value of key of type File.
 	 */
-	public getPath(key: number): File{
+	/*public getPath(key: number): File{
 
-	}
+	}*/
 
 	/**
 	 * Gets the value of key of type ActionReference.
@@ -253,9 +253,9 @@ export class ActionDescriptor {
 	/**
 	 * Gets the type of key.
 	 */
-	public getType(key: number): DescValueType{
+	/*public getType(key: number): DescValueType{
 
-	}
+	}*/
 
 	/**
 	 * Gets the unit type of key of type UnitDouble.
@@ -283,9 +283,9 @@ export class ActionDescriptor {
 	/**
 	 * Determines whether the descriptor is the same as another descriptor.
 	 */
-	public isEqual(otherDesc: ActionDescriptor): boolean{
+	/*public isEqual(otherDesc: ActionDescriptor): boolean{
 
-	}
+	}*/
 
 	/**
 	 * Sets the value for key whose type is boolean.

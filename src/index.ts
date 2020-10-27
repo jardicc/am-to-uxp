@@ -119,20 +119,23 @@ export function executeAction(eventID: number, descriptor?: ActionDescriptor, di
 			break;
 	}
 
-	const result = batchPlay(
-		[
-			{
-				"_obj": typeIDToStringID(eventID),
-				...(descriptor || {}),
-				"_options": {
-					"dialogOptions": mode
-				}
+	const obj = (!descriptor ? {} : descriptor.toBatchPlay());
+	const descToPlay = [
+		{
+			"_obj": typeIDToStringID(eventID),
+			...obj,
+			"_options": {
+				"dialogOptions": mode
 			}
-		], {
+		}
+	]
+	console.log("Send",descToPlay);
+	const result = batchPlay(descToPlay, {
 		"synchronousExecution": true,
 		"modalBehavior": "fail"
 	}) as Descriptor[];
 	const desc = ActionDescriptor.fromBatchPlay(result[0]);
+	console.log("Reply", desc);
 	return desc;
 }
   
@@ -140,6 +143,6 @@ export function executeAction(eventID: number, descriptor?: ActionDescriptor, di
      * Obtains an action descriptor.
      * @param reference The reference specification of the property.
      */
-export function executeActionGet(reference: ActionReference): ActionDescriptor {
+/*export function executeActionGet(reference: ActionReference): ActionDescriptor {
 	
-}
+}*/
