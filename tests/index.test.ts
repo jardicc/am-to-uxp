@@ -21,7 +21,7 @@ jest.mock('../src/imports.ts', () => {
 				} else if (commands[0]?._obj === "make") {
 					return [
 						{
-							"_target": [
+							"target": [
 								{
 									"_ref": "layer"
 								}
@@ -30,6 +30,7 @@ jest.mock('../src/imports.ts', () => {
 						}
 					];
 				}
+				return commands;
 			}
 		}
 	}

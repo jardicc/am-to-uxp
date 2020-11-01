@@ -1,5 +1,4 @@
 import { cloneDeep } from "lodash";
-import { Action } from "photoshop/dist/dom/Actions";
 import { stringIDToTypeID, typeIDToStringID } from ".";
 import { ActionList } from "./ActionList";
 import { ActionReference } from "./ActionReference";
@@ -74,7 +73,7 @@ export enum DescValueType {
 	 * Unit value of type double.
 	 */
 	UNITDOUBLE = 3,
-    }
+}
 
 export interface Descriptor {
 	[prop: string]: DescriptorValue|DescriptorValue[];
@@ -98,7 +97,8 @@ export class ActionDescriptor {
 	 * The number of keys contained in the descriptor.
 	 */
 	public get count(): number {
-		return Object.keys(this._).length;
+		const keys = Object.keys(this._);
+		return keys.includes("_obj") ? keys.length - 1 : keys.length;
 	}
 
 	/**
@@ -125,13 +125,6 @@ export class ActionDescriptor {
 
 		delete this._[typeIDToStringID(key)];
 		console.log(this._);
-	}
-
-	/**
-	 * Creates descriptor from stream of bytes; for reading from disk.
-	 */
-	public fromStream(value: string): void{
-		throw new Error("Not implemented in am-for-uxp");
 	}
 
 	/**
@@ -240,7 +233,8 @@ export class ActionDescriptor {
 	 * Gets the value of key of type ActionReference.
 	 */
 	public getReference(key: number): ActionReference{
-		return ActionReference.fromBatchPlay(this._[typeIDToStringID(key)] as Descriptor[]);
+		const newKey = (typeIDToStringID(key) === "null") ? "_target" : typeIDToStringID(key);
+		return ActionReference.fromBatchPlay(this._[newKey] as Descriptor[]);
 	}
 
 	/**
@@ -283,9 +277,77 @@ export class ActionDescriptor {
 	/**
 	 * Determines whether the descriptor is the same as another descriptor.
 	 */
-	/*public isEqual(otherDesc: ActionDescriptor): boolean{
+	public isEqual(otherDesc: ActionDescriptor): boolean{
+		if (!this.count) {
+			throw new Error("Unknown exception");
+		}
 
-	}*/
+		function recur(d1: any, d2: any): boolean {
+			if (d1 === undefined || d2===undefined) { // custom error
+				throw new Error("Error undefined value is not allowed"); 
+			}
+			if (d1 === null || d2===null) { // custom error
+				throw new Error("Error null value is not allowed"); 
+			}
+
+			if (Object().toString.call(d1) !== Object().toString.call(d2)) {
+				return false;
+			}
+
+			else if (Array.isArray(d1)) {
+				if (d1.length !== d2.length) {
+					return false;
+				}
+				for (let i = 0, len = d1.length; i < len; i++){
+					const res = recur(d1[i], d2[i]);
+					if (!res) {
+						return false
+					}
+				}				
+			} else if (typeof d1 === "object") {
+				if (Object().toString.call(d1) === "[object ArrayBuffer]") {
+					if (d1.byteLength !== d2.byteLength) {
+						return false;
+					}
+					const dUint1 = new Uint8Array(d1);
+					const dUint2 = new Uint8Array(d2);
+					for (let i = 0, len = d1.byteLength; i < len; i++){
+						if (dUint1[i] !== dUint2[i]) {
+							return false;
+						}
+					}
+					return true;
+				} else {
+					const keys1 = Object.keys(d1);
+					const keys2 = Object.keys(d2);
+					if (keys1.length !== keys2.length) {
+						return false
+					}
+					const mappedKeys1:[number,string][] = keys1.map((k, i)=> ([i, stringIDToTypeID(k).toString()]));
+					const mappedKeys2:[number,string][] = keys2.map((k, i) => ([i, stringIDToTypeID(k).toString()]));
+					mappedKeys1.sort((a, b) => (a[1] > b[1]) ? -1 : 1);
+					mappedKeys2.sort((a, b) => (a[1] > b[1]) ? -1 : 1);
+					if (mappedKeys1.map(i => i[1]).join() !== mappedKeys2.map(i => i[1]).join()) {
+						return false;
+					}
+					for (let i = 0, len = mappedKeys1.length; i < len; i++){
+						const index1 = mappedKeys1[i][0];
+						const index2 = mappedKeys2[i][0];
+						const res = recur(d1[keys1[index1]], d2[keys2[index2]]);
+						if (!res) {
+							return false
+						}
+					}
+					return true;
+				}
+			} else {
+				return d1 === d2;
+			}
+			return true;
+		}
+
+		return recur(this.toBatchPlay(), otherDesc.toBatchPlay());
+	}
 
 	/**
 	 * Sets the value for key whose type is boolean.
@@ -370,7 +432,8 @@ export class ActionDescriptor {
 	 * Sets the value for key whose type is an object reference.
 	 */
 	public putReference(key: number, value: ActionReference): void{
-		this._[typeIDToStringID(key)] = value.toBatchPlay();
+		const newKey = (typeIDToStringID(key) === "null") ? "_target" : typeIDToStringID(key);
+		this._[newKey] = value.toBatchPlay();
 	}
 
 	/**
@@ -388,6 +451,13 @@ export class ActionDescriptor {
 			"_unit": typeIDToStringID(unitID),
 			"_value": value
 		}
+	}
+
+	/**
+	 * Creates descriptor from stream of bytes; for reading from disk.
+	 */
+	public fromStream(value: string): void{
+		throw new Error("Not implemented in am-for-uxp");
 	}
 
 	/**
