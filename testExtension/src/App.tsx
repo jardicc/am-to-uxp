@@ -4,6 +4,7 @@ import './App.css'
 import {ActionDescriptor } from "../../src/ActionDescriptor"
 import { stringIDToTypeID, executeAction, DialogModes } from '../../src';
 import { ActionReference } from '../../src/ActionReference';
+import { removeUnused } from './UnusedFilters';
 
 export default class App extends React.Component {
 	constructor(props) {
@@ -26,7 +27,7 @@ export default class App extends React.Component {
 	public render() {
 		return (
 			<div className="panel">
-				<button onClick={() => this.addLayer()}>Add layer</button>
+				<button onClick={removeUnused}>Delete unsused filters</button>
 			</div>
 		)
 	}
