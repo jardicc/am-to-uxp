@@ -19,7 +19,7 @@ jest.mock('../src/imports.ts', () => {
 })
 
 import { charIDToTypeID, stringIDToTypeID, typeIDToStringID } from "../src";
-import { ActionDescriptor } from "../src/ActionDescriptor"
+import { ActionDescriptor, DescValueType } from "../src/ActionDescriptor"
 import { ActionList } from "../src/ActionList";
 import { ActionReference } from "../src/ActionReference";
 
@@ -240,6 +240,86 @@ it("can put/get object", () => {
 	expect(desc1.toBatchPlay()).toEqual({ "to": { abc: true, _obj: "layer" } });
 	expect(typeIDToStringID(desc1.getObjectType(stringIDToTypeID("to")))).toBe("layer")
 	expect(desc1.getObjectValue(stringIDToTypeID("to")).toBatchPlay()).toEqual({ abc: true, _obj: "layer" });
+})
+
+describe("data", () => {
+
+	it("can put data", () => {
+		var d = new ActionDescriptor();
+		d.putData(stringIDToTypeID("abc"), "\x00\x01\x02\x03");
+		var data = d.toBatchPlay();
+		data.abc = Array.from(new Uint8Array(data.abc as ArrayBuffer));
+		expect(data).toEqual({abc:[0,1,2,3]});
+	})
+
+	it("can get data", () => {
+		var d = ActionDescriptor.fromBatchPlay({abc:new Uint8Array([0,1,2,3]).buffer});
+		var data = d.getData(stringIDToTypeID("abc"));
+		expect(data).toEqual("\x00\x01\x02\x03");
+	})
+})
+
+describe("getType", () => {
+
+	var d: ActionDescriptor;
+	var key = stringIDToTypeID("abc");
+	beforeEach(() => {
+		d = new ActionDescriptor();
+	})
+
+	it("ALIASTYPE",()=>{
+
+	})
+	it("BOOLEANTYPE",()=>{
+		d.putBoolean(key, true);
+		expect(d.getType(key)).toBe(DescValueType.BOOLEANTYPE);
+	})
+	it("CLASSTYPE",()=>{
+		d.putClass(key, stringIDToTypeID("xyz"));
+		expect(d.getType(key)).toBe(DescValueType.CLASSTYPE);
+	})
+	it("DOUBLETYPE",()=>{
+		d.putDouble(key, 1.22);
+		expect(d.getType(key)).toBe(DescValueType.DOUBLETYPE);
+	})
+	it("ENUMERATEDTYPE",()=>{
+		d.putEnumerated(key, stringIDToTypeID("xxx"), stringIDToTypeID("yyy"));
+		expect(d.getType(key)).toBe(DescValueType.ENUMERATEDTYPE);
+	})
+	it("INTEGERTYPE",()=>{
+		d.putInteger(key, 1);
+		expect(d.getType(key)).toBe(DescValueType.INTEGERTYPE);
+	})
+	it("LARGEINTEGERTYPE",()=>{
+		d.putInteger(key, Number.MAX_SAFE_INTEGER);
+		expect(d.getType(key)).toBe(DescValueType.INTEGERTYPE);
+	})
+	it("LISTTYPE",()=>{
+		d.putList(key, new ActionList());
+		expect(d.getType(key)).toBe(DescValueType.LISTTYPE);
+	})
+	it("OBJECTTYPE",()=>{
+		d.putObject(key, stringIDToTypeID("xyz"), new ActionDescriptor());
+		expect(d.getType(key)).toBe(DescValueType.OBJECTTYPE);
+	})
+	it("RAWTYPE",()=>{
+		d.putData(key, "abc");
+		expect(d.getType(key)).toBe(DescValueType.RAWTYPE);
+	})
+	it("REFERENCETYPE", () => {
+		const ref = new ActionReference();
+		ref.putIdentifier(key, 1);
+		d.putReference(key, ref);
+		expect(d.getType(key)).toBe(DescValueType.REFERENCETYPE);
+	})
+	it("STRINGTYPE",()=>{
+		d.putString(key, "abc");
+		expect(d.getType(key)).toBe(DescValueType.STRINGTYPE);
+	})
+	it("UNITDOUBLE",()=>{
+		d.putUnitDouble(key, stringIDToTypeID("x"), 1.22);
+		expect(d.getType(key)).toBe(DescValueType.UNITDOUBLE);
+	})
 })
 
 describe("is equal", () => {
