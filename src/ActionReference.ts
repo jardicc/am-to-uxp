@@ -54,7 +54,7 @@ export class ActionReference {
 	 * The class name of the referenced ActionDescriptor object.
 	 */
 	public get typename(): string{
-		return "ActionReference"
+		return "ActionReference";
 	}
 
 	public toBatchPlay(): Descriptor{		
@@ -111,7 +111,7 @@ export class ActionReference {
 		} else if (keys.includes("_name")) {
 			return ReferenceFormType.NAME;
 		} else if (keys.includes("_enum")) {
-			return ReferenceFormType.ENUMERATED
+			return ReferenceFormType.ENUMERATED;
 		} else if (keys.includes("_property")) {
 			return ReferenceFormType.PROPERTY;
 		} else if (keys.includes("_offset")) {
