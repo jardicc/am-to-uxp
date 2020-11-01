@@ -74,7 +74,7 @@ export function stringIDToTypeID(stringID: string): number{
 	return getIDFromString(stringID);
 }
   
-  /**
+/**
    * Converts from a runtime ID to a character ID.
    * @param typeID The ID to convert.
    */
@@ -82,7 +82,7 @@ export function typeIDToCharID(typeID: number): string{
 	return (fCode(typeID >> 24) + fCode((typeID >> 16) & 0xFF) + fCode((typeID >> 8) & 0xFF) + fCode(typeID & 0xFF));	
 }
 
-  /**
+/**
    * Converts from a runtime ID to a string ID.
    * @param typeID The ID to convert.
    */
@@ -90,32 +90,32 @@ export function typeIDToStringID(typeID: number): string{
 	return getStringFromID(typeID);
 }
 
-  /**
+/**
    * Converts from a four character code to a runtime ID.
    * @param charID The ID to convert.
    */
 export function charIDToTypeID(charID: string): number {
-	return (charID.charCodeAt(0) * 0x1000000) +((charID.charCodeAt(1) << 16) |(charID.charCodeAt(2) << 8) |charID.charCodeAt(3))
+	return (charID.charCodeAt(0) * 0x1000000) +((charID.charCodeAt(1) << 16) |(charID.charCodeAt(2) << 8) |charID.charCodeAt(3));
 }
 
 
-  /**
+/**
    * Plays an ActionManager event.
    * @param eventID The event to play.
    * @param descriptor The action descriptor to play.
    * @param displayDialogs The display permissions for dialogs and alert messages.
    */
 export function executeAction(eventID: number, descriptor?: ActionDescriptor, displayDialogs?: DialogModes): ActionDescriptor {
-	let mode = "silent"
+	let mode = "silent";
 	switch (displayDialogs) {
 		case DialogModes.ALL:
 			mode = "display";
 			break;
 		case DialogModes.ERROR:
-			mode = "silent"
+			mode = "silent";
 			break;
 		case DialogModes.NO:
-			mode = "dontDisplay"
+			mode = "dontDisplay";
 			break;
 	}
 
@@ -128,7 +128,7 @@ export function executeAction(eventID: number, descriptor?: ActionDescriptor, di
 				"dialogOptions": mode
 			}
 		}
-	]
+	];
 	console.log("Send",descToPlay);
 	const result = batchPlay(descToPlay, {
 		"synchronousExecution": true,
@@ -139,10 +139,23 @@ export function executeAction(eventID: number, descriptor?: ActionDescriptor, di
 	return desc;
 }
   
-    /**
+/**
      * Obtains an action descriptor.
      * @param reference The reference specification of the property.
      */
-/*export function executeActionGet(reference: ActionReference): ActionDescriptor {
-	
-}*/
+export function executeActionGet(reference: ActionReference): ActionDescriptor {
+	const batchPlay = require("photoshop").action.batchPlay;
+
+	const result = batchPlay(
+		[
+			{
+				"_obj": "get",
+				"_target": reference.toBatchPlay(),
+			}
+		], {
+			"synchronousExecution": true,
+			"modalBehavior": "fail"
+		});
+
+	return ActionDescriptor.fromBatchPlay(result[0]);
+}

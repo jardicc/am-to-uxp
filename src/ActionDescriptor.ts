@@ -245,9 +245,9 @@ export class ActionDescriptor {
 	/**
 	 * Gets the value of key of type File.
 	 */
-	public getPath(key: number): File{
+	/*public getPath(key: number): File{
 
-	}
+	}*/
 
 	/**
 	 * Gets the value of key of type ActionReference.
@@ -489,9 +489,9 @@ export class ActionDescriptor {
 	/**
 	 * Sets the value for key whose type is path.
 	 */
-	public putPath(key: number, value: File): void{
+	/*public putPath(key: number, value: File): void{
 
-	}
+	}*/
 
 	/**
 	 * Sets the value for key whose type is an object reference.
