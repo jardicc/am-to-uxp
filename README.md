@@ -62,3 +62,9 @@ var desc21 = new ActionDescriptor();
 desc21.putInteger(idLyrI, 3);
 console.log(desc21.toBatchPlay()); // converted
 ```
+
+## Currently not fully supported
+- raw data type sent into Photoshop - it is unclear how to make it work: https://forums.creativeclouddeveloper.com/t/how-to-use-raw-data-type-in-batchplay/2092/5
+- file paths
+- `toStream()`
+- `fromStream()`
