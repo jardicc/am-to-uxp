@@ -1,9 +1,8 @@
-
-import { cloneDeep } from "lodash";
 import { Descriptor } from "photoshop/dist/types/UXP";
 import { stringIDToTypeID, typeIDToStringID } from ".";
-import {ActionDescriptor, DescriptorValue } from "./ActionDescriptor";
+import {ActionDescriptor, DescriptorValue, DescValueType } from "./ActionDescriptor";
 import { ActionReference } from "./ActionReference";
+import { _arrayBufferToString, _getType, _stringToArrayBuffer } from "./shared";
 
 export class ActionList {
 
@@ -59,7 +58,9 @@ export class ActionList {
 	 * Gets raw byte data as string value.
 	 */
 	public getData(index: number): string {
-		throw new Error("Not implemented in am-for-uxp");
+		const data = this._[index] as ArrayBuffer;
+		const str = _arrayBufferToString(data);
+		return str;
 	}
 
 	/**
@@ -131,9 +132,9 @@ export class ActionList {
 	/**
 	 * Gets the value of list element of type File.
 	 */
-	/*public getPath(index: number): File {
+	public getPath(index: number)/*: File*/ {
 
-	}*/
+	}
 
 	/**
 	 * Gets the value of list element of type ActionReference.
@@ -152,9 +153,9 @@ export class ActionList {
 	/**
 	 * Gets the type of list element.
 	 */
-	/*public getType(index: number): DescValueType {
-
-	}*/
+	public getType(index: number): DescValueType {
+		return _getType(this._[index]);
+	}
 
 	/**
 	 * Gets the unit value type of list element of type double.
@@ -192,7 +193,7 @@ export class ActionList {
 	 * Appends new value, string containing raw byte data.
 	 */
 	public putData(value: string): void {
-		throw new Error("Not implemented in am-for-uxp");
+		this._.push(_stringToArrayBuffer(value));
 	}
 
 	/**
@@ -280,6 +281,4 @@ export class ActionList {
 	public toBatchPlay(): DescriptorValue[]{
 		return this._;
 	}
-
-
 }
