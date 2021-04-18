@@ -1,6 +1,12 @@
 # Action Manager Code polyfill for UXP
 
-Work in progress. Not yet recommended for use in production unless you are pretty sure what you do.
+Not yet recommended for use in production unless you are pretty sure what you do.
+
+## Currently not fully supported
+- raw data type sent into Photoshop - it is unclear how to make it work: https://forums.creativeclouddeveloper.com/t/how-to-use-raw-data-type-in-batchplay/2092/5
+- file paths
+- `toStream()`
+- `fromStream()`
 
 Allows you to run AM code in UXP. 
 
@@ -62,9 +68,3 @@ var desc21 = new ActionDescriptor();
 desc21.putInteger(idLyrI, 3);
 console.log(desc21.toBatchPlay()); // converted
 ```
-
-## Currently not fully supported
-- raw data type sent into Photoshop - it is unclear how to make it work: https://forums.creativeclouddeveloper.com/t/how-to-use-raw-data-type-in-batchplay/2092/5
-- file paths
-- `toStream()`
-- `fromStream()`
